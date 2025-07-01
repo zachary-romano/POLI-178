@@ -1,0 +1,72 @@
+# Zachary Romano
+# POLI 178
+# Homework 1
+# 29 September 2021
+######################################################################
+
+## The purpose of your homework is to practice manipulating objects and learning their structures
+
+## If you know what a package is,  Do NOT install any packages. Only use base R. 
+
+## If you get stuck, Google it or ask the message board. 
+
+###### Task 1: Generating vectors:
+
+#1a  Create a vector  "a" that runs from -6 to 6 in 0.5 increments. 
+    # so -6, -5.5, -5, -4.5 ... 5.5, 6. 
+  ### Please do not just write it out. 
+a <- seq(-6, 6, by = 0.5)
+
+
+#1b. Create a vector "b" that is the vector a repeated 3 times. 
+b <- rep(a, times = 3)
+
+
+##### 2. Exploring vectors: 
+
+# For vector "b" tell me the: 
+# class
+class(b)
+# Mean 
+mean(b)
+# how many elements are in it. 
+length(b)
+
+####### 3. Manipulating vectors:
+
+# 3.1 Starting with vector b, create a vector "c" the is only the elements "0, 0.5, 1, 1.5"
+c <- b[13:16]
+
+# 3.2 Here is a vector: 
+vec_1 <- c(5,7,9, "apples", "bananas", "apples", 5, 2, 8)
+
+# 3.2.1 What is it's class?
+class(vec_1)
+
+# 3.2.2 Please provide a table that summarizes the frequency of elements in the vector.
+table(vec_1)
+
+# 3.2.3 Without referring to a specific index, reduce the vector to the numbers. 
+vec_2 <- as.numeric(vec_1) # Make new vector that keeps all numeric values of vec_1, make the rest NAs
+vec_2 <- vec_2[!is.na(vec_2)] # Remove all NAs in the vector
+print(vec_2) # Print the vector with only numbers
+
+############## 4. Dataframes and logical operators. 
+
+# 4.1 Referencing only vec_1, create a data.frame with three columns and three rows. 
+# The title for each column should read: "number", "fruit", "score" 
+# Each column should include elements 1-3, 4-6, 7-9 respectively. 
+number <- vec_1[1:3] # Save elements 1-3 as vector named "number"
+fruit <- vec_1[4:6] # Save elements 4-6 as vector named "fruit"
+score <- vec_1[7:9] # Save elements 7-9 as vector named "score"
+
+df <- data.frame(number, fruit, score) # Make dataframe with the three vectors as columns
+
+# 4.2 Create a new column called "apples". Make apples equal to 1 if the fruit is an apple, and 0 otherwise.
+df$apples <- ifelse(df$fruit == "apples", 1, 0)
+
+# 4.3 Create another column called plenty_apples equal to 1 if the fruit is an apple, and the number is more than 7.  
+df$plenty_apples <- ifelse(df$fruit == "apples" & df$number > 7, 1, 0)
+
+## 4.4 Subset the dataframe so that we only have rows where plenty_apples = 1. 
+plenty_apples_df <- subset(df, df$plenty_apples == 1)

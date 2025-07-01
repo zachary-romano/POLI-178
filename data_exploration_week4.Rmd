@@ -1,0 +1,94 @@
+---
+title: "Lim_Project_Task1"
+author: "sheily lim"
+date: "10/18/2021"
+output: html_document
+---
+
+```{r setup, include=FALSE}
+knitr::opts_chunk$set(echo = TRUE)
+```
+
+
+## Importing data set
+
+Big question: Did US intervention beginning in 2001 help improve Afghanistan's
+human rights record?
+
+```{r}
+human_rights <- read.csv("Data/human-rights-scores.csv")
+head(human_rights)
+
+infant_mor <- read.csv("Data/child-mortality-by-income-level-of-country.csv")
+head(infant_mor)
+
+library(dplyr)
+library(tidyverse)
+
+# The higher the score, the better. Ranges from -3.8 to 5.4
+```
+
+## Cleaning the data (human rights)
+
+```{r}
+# renaming score column
+human_rights <- rename(human_rights, Score = Human.Rights.Score..Schnakenberg...Fariss..2014..Fariss..2019.)
+
+human_rights<- human_rights %>% filter(Code == "AFG")
+```
+
+## Some statistical analysis (human rights)
+
+
+```{r}
+
+summary(human_rights)
+max_rights <- max(human_rights$Score)
+min_rights <- min(human_rights$Score)
+
+pre_us_df_hr <- human_rights[human_rights$Year >= 1946 & human_rights$Year < 2001,]
+pre_us_mean_hr <- mean(pre_us_df_hr$Score)
+
+post_us_df_hr <- human_rights[human_rights$Year >= 2001,]
+post_us_mean_hr <- mean(post_us_df_hr$Score)
+
+human_rights[human_rights$Score == max_rights,]
+human_rights[human_rights$Score == min_rights,]
+
+new_plot <- ggplot(dat = human_rights, aes(x = Year, y = Score)) +
+  geom_point()
+
+new_plot
+```
+
+## Cleaning infant mortality data
+
+```{r}
+tail(infant_mor)
+
+# Choose Afghanistan only
+infant_mor <- infant_mor[infant_mor$Code == "AFG",]
+
+# Rename mortality column
+infant_mor <- rename(infant_mor, Mor_rate = Mortality.rate..under.5..per.1.000.live.births.)
+
+
+```
+
+## Some basic statistical summary
+
+```{r}
+summary(infant_mor)
+
+# finding the difference in means before and after us intervention
+pre_us_mean_im <- mean(infant_mor$Mor_rate[infant_mor$Year >= 1962 & infant_mor$Year < 2001])
+
+post_us_mean_im <- mean(infant_mor$Mor_rate[infant_mor$Year >= 2001])
+
+
+# finding where the min and max values occurred
+max_mor <- infant_mor[infant_mor$Mor_rate == max(infant_mor$Mor_rate),]
+min_mor <- infant_mor[infant_mor$Mor_rate == min(infant_mor$Mor_rate),]
+
+
+```
